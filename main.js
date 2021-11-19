@@ -6,73 +6,31 @@ var uncovered = 0
 function setGame(b) {
 
     var a = "<div class=\"btn-toolbar mb-3\" role=\"toolbar\" aria-label=\"Toolbar with button groups\"><div class=\"btn-group-vertical\" id = \"buttonsSet\"><div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
+    var mapHeight, mapWidth, nrMines, mapSize;
     if (b == 1) {
-        var mapHeight = 9, mapWidth = 9, nrMines = 10;
-        var mapSize = mapHeight * mapWidth
-        insertMines(mapHeight, mapWidth, nrMines);
-        randomizeMap(mapHeight, mapWidth);
-        addNrMinesNear(mapHeight, mapWidth);
-        
-        var p = 1;
-        for (var i = 0; i < 9; ++i) {
-            for (var j = 0; j < 9; ++j) {
-                array[p] = array1[i][j];
-                ++p;
-            }
-        }
-        for (var i = 1; i <= mapSize; ++i) {
-            a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth + ", " + nrMines +");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + i + "\"></button>";
-            if (i % mapWidth == 0) {
-                a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
-            }
-        }
+        mapHeight = 9, mapWidth = 9, nrMines = 10;
     }
     if (b == 2) {
-        var mapHeight = 16, mapWidth = 16, nrMines = 40;
-        var mapSize = mapHeight * mapWidth
-        insertMines(mapHeight, mapWidth, nrMines);
-        randomizeMap(mapHeight, mapWidth);
-        addNrMinesNear(mapHeight, mapWidth);
-
-        var p = 1;
-        for (var i = 0; i < 16; ++i) {
-            for (var j = 0; j < 16; ++j) {
-                array[p] = array1[i][j];
-                ++p;
-            }
-        }
-        
-        var x = 0, y = 0;
-        for (var i = 1; i <= mapSize; ++i) {
-            a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth + ", " + nrMines + ");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + i + "\"></button>";
-            ++y;
-            if (i % mapWidth == 0) {
-                a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
-                ++x;
-                y = 0;
-            }
-        }
+        mapHeight = 16, mapWidth = 16, nrMines = 40;
     }
     if (b == 3) {
-        var mapHeight = 16, mapWidth = 30, nrMines = 99;
-        var mapSize = mapHeight * mapWidth
-        insertMines(mapHeight, mapWidth, nrMines);
-        randomizeMap(mapHeight, mapWidth);
-        addNrMinesNear(mapHeight, mapWidth);
-
-        var p = 1;
-        for (var i = 0; i < mapHeight; ++i) {
-            for (var j = 0; j < mapWidth; ++j) {
-                array[p] = array1[i][j];
-                ++p;
-            }
+        mapHeight = 16, mapWidth = 30, nrMines = 99;
+    }
+    mapSize = mapHeight * mapWidth;
+    insertMines(mapHeight, mapWidth, nrMines);
+    randomizeMap(mapHeight, mapWidth);
+    addNrMinesNear(mapHeight, mapWidth);
+    var p = 1;
+    for (var i = 0; i < mapHeight; ++i) {
+        for (var j = 0; j < mapWidth; ++j) {
+            array[p] = array1[i][j];
+            ++p;
         }
-
-        for (var i = 1; i <= mapSize; ++i) {
-            a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth +  ", " + nrMines +");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + i + "\"></button>";
-            if (i % mapWidth == 0) {
-                a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
-            }
+    }
+    for (var i = 1; i <= mapSize; ++i) {
+        a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth + ", " + nrMines +");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + i + "\"></button>";
+        if (i % mapWidth == 0) {
+            a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
         }
     }
     a += "</div></div>"
@@ -151,68 +109,37 @@ function uncover(v, mapHeight, mapWidth) {
         ++uncovered;
     }
     if ((g-1) % mapWidth != 0 && document.getElementById(g-1).disabled==false) {
-        document.getElementById(g-1).disabled=true;
-        document.getElementById(g-1).innerHTML=array[g-1];
-        ++uncovered;
-        if (array[g-1] == 0 ) {
-            uncover(g-1, mapHeight, mapWidth);
-        }
+        discover(g-1, mapHeight, mapWidth);
     }
     if ((g+1) % mapWidth != 1 && document.getElementById(g+1).disabled==false) {
-        document.getElementById(g+1).disabled=true;
-        document.getElementById(g+1).innerHTML=array[g+1];
-        ++uncovered;
-        if (array[g+1] == 0 ) {
-            uncover(g+1, mapHeight, mapWidth);
-        }
+        discover(g+1, mapHeight, mapWidth);
     }
     if ((g+mapWidth) / (mapWidth * mapHeight) <= 1 && document.getElementById(g+mapWidth).disabled==false) {
-        document.getElementById(g+mapWidth).disabled=true;
-        document.getElementById(g+mapWidth).innerHTML=array[g+mapWidth];
-        ++uncovered;
-        if (array[g+mapWidth] == 0) {
-            uncover(g+mapWidth, mapHeight, mapWidth);
-        }
+        discover(g+mapWidth, mapHeight, mapWidth);
     }
     if ((g+mapWidth-1) / (mapWidth * mapHeight) < 1 && (g+mapWidth-1) % mapWidth != 0 && document.getElementById(g+mapWidth-1).disabled==false) {
-        document.getElementById(g+mapWidth-1).disabled=true;
-        document.getElementById(g+mapWidth-1).innerHTML=array[g+mapWidth-1];
-        ++uncovered;
-        if (array[g+mapWidth-1] == 0) {
-            uncover(g+mapWidth-1, mapHeight, mapWidth);
-        }
+        discover(g+mapWidth-1, mapHeight, mapWidth);
     }
     if ((g+mapWidth+1) / (mapWidth * mapHeight) <= 1 && (g+mapWidth+1) % mapWidth != 1 && document.getElementById(g+mapWidth+1).disabled==false) {
-        document.getElementById(g+mapWidth+1).disabled=true;
-        document.getElementById(g+mapWidth+1).innerHTML=array[g+mapWidth+1];
-        ++uncovered;
-        if (array[g+mapWidth+1] == 0) {
-            uncover(g+mapWidth+1, mapHeight, mapWidth);
-        }
+        discover(g+mapWidth+1, mapHeight, mapWidth);
     }
     if ((g-mapWidth) > 0 && document.getElementById(g-mapWidth).disabled==false) {
-        document.getElementById(g-mapWidth).disabled=true;
-        document.getElementById(g-mapWidth).innerHTML=array[g-mapWidth];
-        ++uncovered;
-        if (array[g-mapWidth] == 0) {
-            uncover(g-mapWidth, mapHeight, mapWidth);
-        }
+        discover(g-mapWidth, mapHeight, mapWidth);
     }
     if ((g-mapWidth-1) > 0 && (g-mapWidth-1) % mapWidth != 0 && document.getElementById(g-mapWidth-1).disabled==false) {
-        document.getElementById(g-mapWidth-1).disabled=true;
-        document.getElementById(g-mapWidth-1).innerHTML=array[g-mapWidth-1];
-        ++uncovered;
-        if (array[g-mapWidth-1] == 0) {
-            uncover(g-mapWidth-1, mapHeight, mapWidth);
-        }
+        discover(g-mapWidth-1, mapHeight, mapWidth);
     }
     if ((g-mapWidth+1) > 0 && (g-mapWidth+1) % mapWidth != 1 && document.getElementById(g-mapWidth+1).disabled==false) {
-        document.getElementById(g-mapWidth+1).disabled=true;
-        document.getElementById(g-mapWidth+1).innerHTML=array[g-mapWidth+1];
-        ++uncovered;
-        if (array[g-mapWidth+1] == 0) {
-            uncover(g-mapWidth+1, mapHeight, mapWidth);
-        }
+        discover(g-mapWidth+1, mapHeight, mapWidth);
+    }
+}
+
+function discover(id, mapHeight, mapWidth) {
+    document.getElementById(id).disabled=true;
+    document.getElementById(id).innerHTML=array[id];
+    ++uncovered;
+    if (array[id] == 0) {
+        uncover(id, mapHeight, mapWidth);
     }
 }
 
