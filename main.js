@@ -3,7 +3,6 @@ const array = [];
 var uncovered = 0
 
 function setGame(b) {
-
     var a = "<div class=\"btn-toolbar mb-3\" role=\"toolbar\" aria-label=\"Toolbar with button groups\"><div class=\"btn-group-vertical\" id = \"buttonsSet\"><div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
     var mapHeight, mapWidth, nrMines, mapSize;
     if (b == 1) {
@@ -53,32 +52,38 @@ function addNrMinesNear(mapHeight, mapWidth) {
     for (var i = 0; i < mapHeight; ++i) {
         for (var j = 0; j < mapWidth; ++j) {
             if (array1[i][j] == 'M') {
-                if (j != 0 && array1[i][j - 1] != 'M') {
-                    ++array1[i][j - 1];
+                if (j != 0 && i != 0) {
+                    addNrMinesHear(i - 1, j - 1);
                 }
-                if (j != mapWidth-1 && array1[i][j + 1] != 'M') {
-                    ++array1[i][j + 1];
+                if (i != 0) {
+                    addNrMinesHear(i - 1, j);
                 }
-                if (i != mapHeight-1 && array1[i + 1][j] != 'M') {
-                    ++array1[i + 1][j];
+                if (i != 0 && j != mapWidth-1) {
+                    addNrMinesHear(i - 1, j + 1);
                 }
-                if (i != mapHeight-1 && j != 0 && array1[i + 1][j - 1] != 'M') {
-                    ++array1[i + 1][j - 1];
+                if (j != mapWidth-1 ) {
+                    addNrMinesHear(i, j + 1);
                 }
-                if (j != 0 && i != 0 && array1[i - 1][j - 1] != 'M') {
-                    ++array1[i - 1][j - 1];
+                if (i != mapHeight-1 && j != mapWidth-1) {
+                    addNrMinesHear(i + 1, j + 1);
                 }
-                if (i != 0 && array1[i - 1][j] != 'M') {
-                    ++array1[i - 1][j];
+                if (i != mapHeight-1 ) {
+                    addNrMinesHear(i + 1, j);
                 }
-                if (i != 0 && j != mapWidth-1 && array1[i - 1][j + 1] != 'M') {
-                    ++array1[i - 1][j + 1];
+                if (i != mapHeight-1 && j != 0) {
+                    addNrMinesHear(i + 1, j - 1);
                 }
-                if (i != mapHeight-1 && j != mapWidth-1 && array1[i + 1][j + 1] != 'M') {
-                    ++array1[i + 1][j + 1];
+                if (j != 0 ) {
+                    addNrMinesHear(i, j - 1);
                 }
             }
         }
+    }
+}
+
+function addNrMinesHear(i, j) {
+    if (array1[i][j] != 'M') {
+        ++array1[i][j];
     }
 }
 
@@ -89,38 +94,40 @@ function uncover(v, mapHeight, mapWidth) {
         document.getElementById(g).innerHTML=array[g];
         ++uncovered;
     }
-    if ((g-1) % mapWidth != 0 && document.getElementById(g-1).disabled==false) {
+    if ((g-1) % mapWidth != 0) {
         discover(g-1, mapHeight, mapWidth);
     }
-    if ((g+1) % mapWidth != 1 && document.getElementById(g+1).disabled==false) {
+    if ((g+1) % mapWidth != 1) {
         discover(g+1, mapHeight, mapWidth);
     }
-    if ((g+mapWidth) / (mapWidth * mapHeight) <= 1 && document.getElementById(g+mapWidth).disabled==false) {
+    if ((g+mapWidth) / (mapWidth * mapHeight) <= 1) {
         discover(g+mapWidth, mapHeight, mapWidth);
     }
-    if ((g+mapWidth-1) / (mapWidth * mapHeight) < 1 && (g+mapWidth-1) % mapWidth != 0 && document.getElementById(g+mapWidth-1).disabled==false) {
+    if ((g+mapWidth-1) / (mapWidth * mapHeight) < 1 && (g+mapWidth-1) % mapWidth != 0) {
         discover(g+mapWidth-1, mapHeight, mapWidth);
     }
-    if ((g+mapWidth+1) / (mapWidth * mapHeight) <= 1 && (g+mapWidth+1) % mapWidth != 1 && document.getElementById(g+mapWidth+1).disabled==false) {
+    if ((g+mapWidth+1) / (mapWidth * mapHeight) <= 1 && (g+mapWidth+1) % mapWidth != 1) {
         discover(g+mapWidth+1, mapHeight, mapWidth);
     }
-    if ((g-mapWidth) > 0 && document.getElementById(g-mapWidth).disabled==false) {
+    if ((g-mapWidth) > 0) {
         discover(g-mapWidth, mapHeight, mapWidth);
     }
-    if ((g-mapWidth-1) > 0 && (g-mapWidth-1) % mapWidth != 0 && document.getElementById(g-mapWidth-1).disabled==false) {
+    if ((g-mapWidth-1) > 0 && (g-mapWidth-1) % mapWidth != 0) {
         discover(g-mapWidth-1, mapHeight, mapWidth);
     }
-    if ((g-mapWidth+1) > 0 && (g-mapWidth+1) % mapWidth != 1 && document.getElementById(g-mapWidth+1).disabled==false) {
+    if ((g-mapWidth+1) > 0 && (g-mapWidth+1) % mapWidth != 1) {
         discover(g-mapWidth+1, mapHeight, mapWidth);
     }
 }
 
 function discover(id, mapHeight, mapWidth) {
-    document.getElementById(id).disabled=true;
-    document.getElementById(id).innerHTML=array[id];
-    ++uncovered;
-    if (array[id] == 0) {
-        uncover(id, mapHeight, mapWidth);
+    if (document.getElementById(id).disabled==false) {
+        document.getElementById(id).disabled=true;
+        document.getElementById(id).innerHTML=array[id];
+        ++uncovered;
+        if (array[id] == 0) {
+            uncover(id, mapHeight, mapWidth);
+        }
     }
 }
 
@@ -149,7 +156,6 @@ function showValue(e, mapHeight, mapWidth, nrMines) {
 }
 
 function flagThis(e) {
-    
     if (document.getElementById(e.id).innerHTML=="<img src=\"redFlag.png\">") {
         document.getElementById(e.id).innerHTML="";
     } else {
