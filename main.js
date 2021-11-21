@@ -1,5 +1,4 @@
-
-var array1 = [];
+const array1 = new Array();
 const array = [];
 var uncovered = 0
 
@@ -17,20 +16,17 @@ function setGame(b) {
         mapHeight = 16, mapWidth = 30, nrMines = 99;
     }
     mapSize = mapHeight * mapWidth;
-    insertMines(mapHeight, mapWidth, nrMines);
-    randomizeMap(mapHeight, mapWidth);
+    insertMinesRandom(mapHeight, mapWidth, nrMines);
     addNrMinesNear(mapHeight, mapWidth);
     var p = 1;
     for (var i = 0; i < mapHeight; ++i) {
         for (var j = 0; j < mapWidth; ++j) {
             array[p] = array1[i][j];
+            a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth + ", " + nrMines +");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + p + "\"></button>";
+            if (p % mapWidth == 0) {
+                a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
+            }
             ++p;
-        }
-    }
-    for (var i = 1; i <= mapSize; ++i) {
-        a += "<button type=\"button\" class=\"btn btn-outline-secondary\"  oncontextmenu=\"return flagThis(this); return false;\" onclick=\"return showValue(this, " + mapHeight + ", " + mapWidth + ", " + nrMines +");\"style=\"width: 2.4rem; height: 2.4rem;\" id=\"" + i + "\"></button>";
-        if (i % mapWidth == 0) {
-            a += "</div> <div class=\"btn-group me-2\" role=\"group\" aria-label=\"First group\">";
         }
     }
     a += "</div></div>"
@@ -39,32 +35,17 @@ function setGame(b) {
     return false;
 }
 
-function insertMines(mapHeight, mapWidth, nrMines) {
-    var mines = 1;
+function insertMinesRandom(mapHeight, mapWidth, nrMines) {
+    var q , w;
     for (var i = 0; i < mapHeight; ++i) {
-        array1.push([]);
-        array1[i].push( new Array(mapWidth));
-        for (var j = 0; j < mapWidth; ++j) {
-            if (mines <= nrMines) {
-                array1[i][j] = 'M';
-            } else {
-                array1[i][j] = 0;
-            }
-            ++mines;
-        }
+        array1[i] = new Array(mapWidth).fill(0);
     }
-}
-
-function randomizeMap (mapHeight, mapWidth) {
-    for (var i = 0; i < mapHeight; ++i) {
-        for (var j = 0; j < mapWidth; ++j) {
-            var q = Math.floor(Math.random() * mapHeight);
-            var w = Math.floor(Math.random() * mapWidth);
-            var tempq = array1[i][j];
-            var tempw = array1[q][w];
-            array1[i][j] = tempw;
-            array1[q][w] = tempq;
-        }
+    for (var i = 0; i < nrMines; ++i) {
+        do {
+            q = Math.floor(Math.random() * mapHeight);
+            w = Math.floor(Math.random() * mapWidth);
+        } while (array1[q][w] == 'M');
+        array1[q][w] = 'M';
     }
 }
 
@@ -146,7 +127,7 @@ function discover(id, mapHeight, mapWidth) {
 function showValue(e, mapHeight, mapWidth, nrMines) {
     if (array[e.id] == 'M') {
         document.getElementById(e.id).style.backgroundColor="red";
-        document.getElementById("whatToDo").innerHTML="<H4 style=\"font-size: 50px;\">GAME OVER</H4> <button class=\"btn btn-primary\" type=\"button\" onclick=\"return restart();\">Restart Game</button>"
+        document.getElementById("whatToDo").innerHTML="<H4 style=\"font-size: 50px;\">GAME OVER</H4> <button class=\"btn btn-primary\" type=\"button\" onclick=\"return restart();\">Restart Game</button>";
         for (var i = 0; i <= mapHeight * mapWidth; ++i) {
             if (array[i] == 'M') {
                 document.getElementById(i).disabled=true;
@@ -162,8 +143,7 @@ function showValue(e, mapHeight, mapWidth, nrMines) {
         ++uncovered;
     }
     if (mapHeight * mapWidth - uncovered == nrMines) {
-        document.getElementById("whatToDo").innerHTML="<H4 style=\"font-size: 50px;\">Congratulation!</H4> <button class=\"btn btn-primary\" type=\"button\" onclick=\"return restart();\">Restart Game</button>"
-        
+        document.getElementById("whatToDo").innerHTML="<H4 style=\"font-size: 50px;\">Congratulation!</H4> <button class=\"btn btn-primary\" type=\"button\" onclick=\"return restart();\">Restart Game</button>";
     }
     return false;
 }
@@ -171,9 +151,9 @@ function showValue(e, mapHeight, mapWidth, nrMines) {
 function flagThis(e) {
     
     if (document.getElementById(e.id).innerHTML=="<img src=\"redFlag.png\">") {
-        document.getElementById(e.id).innerHTML=""
+        document.getElementById(e.id).innerHTML="";
     } else {
-        document.getElementById(e.id).innerHTML="<img src=\"redFlag.png\">"
+        document.getElementById(e.id).innerHTML="<img src=\"redFlag.png\">";
     }
     return false;
 }
