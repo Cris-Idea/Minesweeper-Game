@@ -53,35 +53,35 @@ function addNrMinesNear(mapHeight, mapWidth) {
         for (var j = 0; j < mapWidth; ++j) {
             if (array1[i][j] == 'M') {
                 if (j != 0 && i != 0) {
-                    addNrMinesHear(i - 1, j - 1);
+                    addNrMinesHere(i - 1, j - 1);
                 }
                 if (i != 0) {
-                    addNrMinesHear(i - 1, j);
+                    addNrMinesHere(i - 1, j);
                 }
                 if (i != 0 && j != mapWidth-1) {
-                    addNrMinesHear(i - 1, j + 1);
+                    addNrMinesHere(i - 1, j + 1);
                 }
                 if (j != mapWidth-1 ) {
-                    addNrMinesHear(i, j + 1);
+                    addNrMinesHere(i, j + 1);
                 }
                 if (i != mapHeight-1 && j != mapWidth-1) {
-                    addNrMinesHear(i + 1, j + 1);
+                    addNrMinesHere(i + 1, j + 1);
                 }
                 if (i != mapHeight-1 ) {
-                    addNrMinesHear(i + 1, j);
+                    addNrMinesHere(i + 1, j);
                 }
                 if (i != mapHeight-1 && j != 0) {
-                    addNrMinesHear(i + 1, j - 1);
+                    addNrMinesHere(i + 1, j - 1);
                 }
                 if (j != 0 ) {
-                    addNrMinesHear(i, j - 1);
+                    addNrMinesHere(i, j - 1);
                 }
             }
         }
     }
 }
 
-function addNrMinesHear(i, j) {
+function addNrMinesHere(i, j) {
     if (array1[i][j] != 'M') {
         ++array1[i][j];
     }
