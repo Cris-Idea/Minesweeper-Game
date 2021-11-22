@@ -52,29 +52,29 @@ function addNrMinesNear(mapHeight, mapWidth) {
     for (var i = 0; i < mapHeight; ++i) {
         for (var j = 0; j < mapWidth; ++j) {
             if (array1[i][j] == 'M') {
-                if (j != 0 && i != 0) {
-                    addNrMinesHere(i - 1, j - 1);
+                if (j != 0 ) {
+                    addNrMinesHere(i, j - 1);
+                    if (i != 0) {
+                        addNrMinesHere(i - 1, j - 1);
+                    }
                 }
                 if (i != 0) {
                     addNrMinesHere(i - 1, j);
-                }
-                if (i != 0 && j != mapWidth-1) {
-                    addNrMinesHere(i - 1, j + 1);
+                    if (j != mapWidth-1) {
+                        addNrMinesHere(i - 1, j + 1);
+                    }
                 }
                 if (j != mapWidth-1 ) {
                     addNrMinesHere(i, j + 1);
-                }
-                if (i != mapHeight-1 && j != mapWidth-1) {
-                    addNrMinesHere(i + 1, j + 1);
+                    if (i != mapHeight-1) {
+                        addNrMinesHere(i + 1, j + 1);
+                    }
                 }
                 if (i != mapHeight-1 ) {
                     addNrMinesHere(i + 1, j);
-                }
-                if (i != mapHeight-1 && j != 0) {
-                    addNrMinesHere(i + 1, j - 1);
-                }
-                if (j != 0 ) {
-                    addNrMinesHere(i, j - 1);
+                    if (j != 0) {
+                        addNrMinesHere(i + 1, j - 1);
+                    }
                 }
             }
         }
