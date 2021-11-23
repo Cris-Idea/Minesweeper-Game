@@ -49,41 +49,27 @@ function insertMinesRandom(mapHeight, mapWidth, nrMines) {
 }
 
 function addNrMinesNear(mapHeight, mapWidth) {
+    var lin, col;
     for (var i = 0; i < mapHeight; ++i) {
         for (var j = 0; j < mapWidth; ++j) {
             if (array1[i][j] == 'M') {
-                if (j != 0 ) {
-                    addNrMinesHere(i, j - 1);
-                    if (i != 0) {
-                        addNrMinesHere(i - 1, j - 1);
-                    }
-                }
-                if (i != 0) {
-                    addNrMinesHere(i - 1, j);
-                    if (j != mapWidth-1) {
-                        addNrMinesHere(i - 1, j + 1);
-                    }
-                }
-                if (j != mapWidth-1 ) {
-                    addNrMinesHere(i, j + 1);
-                    if (i != mapHeight-1) {
-                        addNrMinesHere(i + 1, j + 1);
-                    }
-                }
-                if (i != mapHeight-1 ) {
-                    addNrMinesHere(i + 1, j);
-                    if (j != 0) {
-                        addNrMinesHere(i + 1, j - 1);
+                var lin = i - 1;
+                if (i == 0) {
+                    ++lin;
+                } 
+                var col = j - 1;
+                if (j == 0) {
+                    ++col;
+                } 
+                for (; lin <= i + 1 && lin < mapHeight; ++lin) {
+                    for (var colj = col; colj <= j + 1 && colj < mapWidth; ++colj) {
+                        if (array1[lin][colj] != 'M') {
+                            ++array1[lin][colj];
+                        }
                     }
                 }
             }
         }
-    }
-}
-
-function addNrMinesHere(i, j) {
-    if (array1[i][j] != 'M') {
-        ++array1[i][j];
     }
 }
 
@@ -139,7 +125,7 @@ function showValue(e, mapHeight, mapWidth, nrMines) {
             if (array[i] == 'M') {
                 document.getElementById(i).disabled=true;
                 document.getElementById(i).innerHTML=array[i];
-            } 
+            }
         }
     } else if (array[e.id] == 0) {
         uncover(e.id, mapHeight, mapWidth);
